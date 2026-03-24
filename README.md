@@ -1,55 +1,111 @@
-# ROS2 Clean Architecture Environment
+# ROS2 Copilot Template
 
-## Project Purpose
+This repository is the official VS Code and GitHub Copilot focused fork of the ROS2 Clean Architecture template. It preserves the original architectural goals, but restructures the guidance around Copilot-native customization primitives: workspace instructions, targeted instruction files, and discoverable skills.
 
-This project establishes a standardized, robust, and maintainable environment for developing **ROS2 (Robot Operating System 2)** applications. It is designed to strictly adhere to **Clean Architecture** principles, ensuring that business logic is decoupled from the underlying ROS2 framework.
+## Purpose
 
-The primary goal is to provide a comprehensive set of rules, templates, and guidelines that enable developers to build scalable robotic software with consistent patterns in both **Python** and **C++**.
+The template is meant for ROS2 projects that want:
 
-## Key Features
+- Clean Architecture boundaries that stay intact while features grow
+- consistent ROS2 patterns in Python and C++
+- better context management for GitHub Copilot inside VS Code
+- reusable guidance for nodes, launch files, messaging, lifecycle handling, testing, TF2, diagnostics, and bagging
 
-### 1. Clean Architecture Implementation
+## What Changed In This Fork
 
-The project enforces a clear separation of concerns:
+The old Claude-centric layout has been replaced by a Copilot-centric layout:
 
-- **Domain Layer**: Core business logic and entities (Framework-agnostic).
-- **Application Layer**: Use cases and application-specific logic.
-- **Infrastructure Layer**: ROS2 adapters, hardware interfaces, and repositories.
-- **Presentation Layer**: CLI tools, GUIs, and external APIs.
+- `.github/copilot-instructions.md` is the always-on workspace instruction file
+- `.github/instructions/` holds targeted, task-specific guidance that Copilot can load only when needed
+- `.github/skills/` holds reusable deep-dive workflows and templates for common ROS2 tasks
+- the former `rules` and `commands` content is now expressed as instruction files so context stays narrower and easier for Copilot to route
 
-### 2. Bilingual Support (Python & C++)
+## Context Model
 
-Recognizing the dual nature of the ROS2 ecosystem, this environment provides equal support for both languages:
+This template is optimized for selective context loading rather than loading every rule up front.
 
-- **Standardized Nodes**: Templates for standard Nodes, Lifecycle Nodes, and Managed Nodes.
-- **Communication patterns**: Consistent implementation of Publishers, Subscribers, Services, and Actions.
-- **Build Systems**: Best practices for `setup.py` (Python) and `CMakeLists.txt` (C++).
+1. Start with `.github/copilot-instructions.md` for the repository-wide operating model.
+2. Load only the instruction file that matches the task.
+3. Load a skill only when the task needs a reusable workflow or scaffold.
 
-### 3. Comprehensive Rule Set
+That keeps prompts smaller and reduces irrelevant context during normal development.
 
-The `.claude/rules` directory contains detailed guidelines for:
+## Repository Layout
 
-- **Architecture**: Defining layer boundaries and dependency rules.
-- **Node Development**: Patterns for creating robust and testable nodes.
-- **Communication**: Standards for Topic naming, QoS profiles, and custom interfaces.
-- **Testing**: Strategies for Unit (GTest/pytest), Integration, and Launch testing.
+```text
+.github/
+├── copilot-instructions.md
+├── instructions/
+│   ├── context-routing.instruction.md
+│   ├── clean-architecture.instruction.md
+│   ├── ros2-packages-and-nodes.instruction.md
+│   ├── ros2-communication.instruction.md
+│   ├── ros2-launch-and-lifecycle.instruction.md
+│   ├── ros2-testing.instruction.md
+│   ├── robot-description-and-tf.instruction.md
+│   └── ros2-runtime-workflows.instruction.md
+└── skills/
+	├── ros2_node_creation/
+	├── ros2_launch_config/
+	├── ros2_service_action/
+	├── ros2_messaging/
+	├── ros2_testing/
+	├── ros2_lifecycle/
+	├── ros2_transforms/
+	├── ros2_diagnostics/
+	└── ros2_bag/
+```
 
-### 4. Developer Skills & Templates
+## Instruction Files
 
-A library of "Skills" (`.claude/skills`) provides ready-to-use templates and explanations for:
+Use `.github/instructions/` for targeted guidance:
 
-- **Node Creation & Lifecycle Management**
-- **messaging Patterns (Pub/Sub, Services, Actions)**
-- **Launch Configuration & Parameters**
-- **TF2 Transforms & Diagnostics**
-- **Bag Recording & Replay**
+- `context-routing.instruction.md`: how Copilot should choose the smallest relevant context
+- `clean-architecture.instruction.md`: domain, application, infrastructure, and presentation boundaries
+- `ros2-packages-and-nodes.instruction.md`: package structure, naming, parameters, logging, and node layout
+- `ros2-communication.instruction.md`: topics, QoS, messages, services, and actions
+- `ros2-launch-and-lifecycle.instruction.md`: launch composition and lifecycle node behavior
+- `ros2-testing.instruction.md`: unit, integration, and launch testing strategy
+- `robot-description-and-tf.instruction.md`: URDF, xacro, TF2, and robot frame guidance
+- `ros2-runtime-workflows.instruction.md`: build, test, sourcing, introspection, and debugging commands
 
-## Getting Started
+## Skills
 
-1.  **Review the Rules**: Check the `.claude/rules/` directory to understand the architectural standards.
-2.  **Use the Skills**: Refer to `.claude/skills/` for implementation examples and templates.
-3.  **Run Tests**: Use `colcon test` and `pytest` to verify your implementations.
+Use `.github/skills/` when Copilot needs a task-focused workflow rather than a general rule set:
+
+- `ros2_node_creation`: create or refactor ROS2 nodes and package scaffolding
+- `ros2_launch_config`: structure launch files and parameter loading
+- `ros2_service_action`: implement service and action patterns
+- `ros2_messaging`: build publishers, subscribers, and message mapping layers
+- `ros2_testing`: add tests across the ROS2 testing pyramid
+- `ros2_lifecycle`: implement managed nodes and state transitions
+- `ros2_transforms`: integrate TF2 without leaking framework dependencies into the domain
+- `ros2_diagnostics`: add diagnostics and health monitoring
+- `ros2_bag`: record, replay, and inspect ROS2 bag data
+
+## How To Use In VS Code
+
+Open the repository in VS Code and work with Copilot in natural language. For best results:
+
+1. Describe the ROS2 task directly.
+2. Mention the architectural layer or package when it matters.
+3. Ask for a specific skill when you want scaffolded output.
+4. Keep requests scoped to one subsystem when possible.
+
+Examples:
+
+- "Create a lifecycle-enabled Python sensor node using the `ros2_node_creation` skill."
+- "Refactor this publisher/subscriber flow to keep ROS2 message mapping in infrastructure only."
+- "Add launch tests for this package using the testing instruction and the `ros2_testing` skill."
+
+## Core Principles
+
+- Domain code stays free of ROS2 dependencies.
+- Application code orchestrates use cases and ports.
+- Infrastructure code owns ROS2 nodes, adapters, message conversions, and hardware integration.
+- Presentation code depends inward.
+- Tests and documentation move with meaningful interface changes.
 
 ## License
 
-This project is open-source and available under the Apache 2.0 License.
+This project remains available under the Apache 2.0 License.
