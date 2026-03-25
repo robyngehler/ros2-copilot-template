@@ -1,6 +1,6 @@
 # ROS2 Copilot Template
 
-This repository is the official VS Code and GitHub Copilot focused fork of the ROS2 Clean Architecture template. It preserves the original architectural goals, but restructures the guidance around Copilot-native customization primitives: workspace instructions, targeted instruction files, and discoverable skills.
+This repository is the official VS Code and GitHub Copilot focused fork of the ROS2 Clean Architecture template. It preserves the original architectural goals, restructures the guidance around Copilot-native customization primitives, and now adds a neutral `AGENTS.md` layer so the template is not coupled to a single tool surface.
 
 ## Purpose
 
@@ -15,8 +15,10 @@ The template is meant for ROS2 projects that want:
 
 The old Claude-centric layout has been replaced by a Copilot-centric layout:
 
+- `AGENTS.md` now holds the durable, tool-neutral engineering contract
 - `.github/copilot-instructions.md` is the always-on workspace instruction file
 - `.github/instructions/` holds targeted, task-specific guidance that Copilot can load only when needed
+- `.github/agents/` holds specialized Copilot personas for backend work, frontend-facing work, and integration review
 - `.github/skills/` holds reusable deep-dive workflows and templates for common ROS2 tasks
 - the former `rules` and `commands` content is now expressed as instruction files so context stays narrower and easier for Copilot to route
 
@@ -24,17 +26,23 @@ The old Claude-centric layout has been replaced by a Copilot-centric layout:
 
 This template is optimized for selective context loading rather than loading every rule up front.
 
-1. Start with `.github/copilot-instructions.md` for the repository-wide operating model.
-2. Load only the instruction file that matches the task.
-3. Load a skill only when the task needs a reusable workflow or scaffold.
+1. Start with `AGENTS.md` for the durable engineering contract.
+2. Read `.github/copilot-instructions.md` for the repository-wide Copilot operating model.
+3. Load only the instruction file that matches the task.
+4. Load a skill or custom agent only when the task needs a reusable workflow or a narrower persona.
 
 That keeps prompts smaller and reduces irrelevant context during normal development.
 
 ## Repository Layout
 
 ```text
+AGENTS.md
 .github/
 ├── copilot-instructions.md
+├── agents/
+│   ├── frontend-ui.agent.md
+│   ├── integration-review.agent.md
+│   └── ros-backend.agent.md
 ├── instructions/
 │   ├── context-routing.instruction.md
 │   ├── clean-architecture.instruction.md
@@ -68,6 +76,14 @@ Use `.github/instructions/` for targeted guidance:
 - `ros2-testing.instruction.md`: unit, integration, and launch testing strategy
 - `robot-description-and-tf.instruction.md`: URDF, xacro, TF2, and robot frame guidance
 - `ros2-runtime-workflows.instruction.md`: build, test, sourcing, introspection, and debugging commands
+
+## Custom Agents
+
+Use `.github/agents/` when a task benefits from a narrower specialist persona:
+
+- `ros-backend`: ROS2 package, node, messaging, launch, lifecycle, and test work
+- `frontend-ui`: frontend-facing integration work with explicit backend contracts
+- `integration-review`: end-to-end review of contracts, validation, and architectural fit
 
 ## Skills
 

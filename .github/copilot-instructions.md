@@ -1,20 +1,23 @@
 # ROS2 Copilot Workspace Instructions
 
-This repository is organized for GitHub Copilot in VS Code. Keep the always-on context small, and load specialized guidance from `.github/instructions/` and `.github/skills/` only when the task actually needs it.
+This repository is organized for GitHub Copilot in VS Code. Treat `AGENTS.md` as the neutral engineering contract, then use this file as the Copilot-specific operating model. Keep the always-on context small, and load specialized guidance from `.github/instructions/` and `.github/skills/` only when the task actually needs it.
 
 ## Operating Model
 
 1. Read `README.md` for repository-level orientation.
-2. Treat this file as the minimal always-on operating model.
-3. Load one relevant file from `.github/instructions/` before expanding further.
-4. Load a skill from `.github/skills/` only when the task needs a reusable workflow or scaffold.
+2. Read `AGENTS.md` for the durable, tool-neutral rules.
+3. Treat this file as the minimal Copilot operating model.
+4. Load one relevant file from `.github/instructions/` before expanding further.
+5. Load a skill from `.github/skills/` only when the task needs a reusable workflow or scaffold.
 
 ## Source Of Truth Order
 
 - repository overview: `README.md`
+- neutral engineering contract: `AGENTS.md`
 - workspace-wide operating model: this file
 - targeted rules and constraints: `.github/instructions/`
 - reusable task workflows: `.github/skills/`
+- specialist Copilot personas: `.github/agents/`
 
 Do not load every instruction or every skill by default. Match context to the task.
 
@@ -42,6 +45,14 @@ Use these only for task-shaped work:
 - `ros2_diagnostics`
 - `ros2_bag`
 
+## Custom Agents
+
+Use these when a task benefits from a narrower persona instead of the default generalist:
+
+- `ros-backend`
+- `frontend-ui`
+- `integration-review`
+
 ## Default Engineering Expectations
 
 - keep ROS2 framework details out of the domain layer
@@ -57,6 +68,7 @@ Use these only for task-shaped work:
 - inspect graph: `ros2 node list`, `ros2 topic list`, `ros2 service list`, `ros2 action list`
 
 Use `.github/instructions/ros2-runtime-workflows.instruction.md` when the task involves environment setup, rosdep, build failures, dependency order, or runtime debugging.
+```
 colcon build --symlink-install
 colcon build --packages-select <pkg_name>
 colcon build --packages-up-to <pkg_name>
